@@ -1,11 +1,11 @@
 FROM fedora
 MAINTAINER Lénaïc Huard <lhuard@amadeus.com>
 
-ADD https://github.com/lhuard1A/openshift-ansible/archive/35706d4.tar.gz /openshift-ansible/
+ADD https://github.com/lhuard1A/openshift-ansible/archive/b7c1a0b.tar.gz /openshift-ansible/
 
 RUN yum -y install tar && \
     cd /openshift-ansible && \
-    tar -xf 35706d4.tar.gz --strip 1 && \
+    tar -xf b7c1a0b.tar.gz --strip 1 && \
     yum -y erase tar && \
     yum clean all
 
