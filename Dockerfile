@@ -15,7 +15,8 @@ RUN mkdir /home/openshift-ansible/.ssh && \
 RUN yum -y install ansible \
                    openssh-clients \
                    python-novaclient \
-                   python-neutronclient && \
+                   python-neutronclient \
+                   python-heatclient && \
     yum clean all
 
 
@@ -36,6 +37,16 @@ RUN yum -y install tar && \
 
 RUN ln -s inventory/os/hosts/nova.ini /openshift-ansible
 
+
+# Override some openshift-ansible default settings with my own
+
+ADD personal_settings.patch /openshift-ansible/
+
+RUN yum -y install patch && \
+    cd /openshift-ansible && \
+    patch -p1 < personal_settings.patch && \
+    yum -y erase patch && \
+    yum clean all
 
 USER openshift-ansible
 WORKDIR /openshift-ansible
