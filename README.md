@@ -5,7 +5,7 @@ The `lhuard1a/openshift-ansible` docker image packages [openshift-ansible](https
 
 In order to work properly, the `lhuard1a/openshift-ansible` docker image has some requirements.
 
-The easiest way to use it is to use the [`docker-openshift-ansible script`](https://github.com/lhuard1A/docker-openshift-ansible-os/blob/master/docker-openshift-ansible) that can be downloaded at the following url: https://raw.githubusercontent.com/lhuard1A/docker-openshift-ansible-os/master/docker-openshift-ansible
+The easiest way to use it is to use the [`docker-openshift-ansible script`](https://github.com/lhuard1A/docker-openshift-ansible-os/blob/2015.05.21/docker-openshift-ansible) that can be downloaded at the following url: https://raw.githubusercontent.com/lhuard1A/docker-openshift-ansible-os/2015.05.21/docker-openshift-ansible
 
 Pre-requisites:
 ---------------
@@ -20,8 +20,13 @@ Usage:
 ### Create a new cluster
 
 ```
-docker-openshift-ansible create os <cluster-id>
+docker-openshift-ansible create os -t <deployment_type> -n <nb_nodes> <cluster-id>
 ```
+
+where `deployment_type` can be:
+
+* `origin` (by default) for a deployment on CentOS
+* `enterprise` for a deployment on RHEL 7.1
 
 ### List the machines of a cluster
 

@@ -9,4 +9,4 @@ exec docker run --rm -ti \
                 -v $HOME/.ssh/id_rsa.pub:/home/openshift-ansible/.ssh/id_rsa.pub:ro \
                 -v $SSH_AUTH_SOCK:/tmp/ssh/agent \
                 -e SSH_AUTH_SOCK=/tmp/ssh/agent \
-                lhuard1a/openshift-ansible "$@"
+                lhuard1a/openshift-ansible:2015.05.21 "$@"
