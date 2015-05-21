@@ -13,3 +13,16 @@ index aa696b0..ace1d16 100644
  openstack_ssh_keypair: "{{ lookup('env', 'LOGNAME') }}_key"
  openstack_ssh_public_key: "{{ lookup('file','~/.ssh/id_rsa.pub') }}"
  openstack_flavor_ram: 2048
+diff --git a/playbooks/os/openshift-cluster/vars.yml b/playbooks/os/openshift-cluster/vars.yml
+index b5bc925..0386bb9 100644
+--- a/playbooks/os/openshift-cluster/vars.yml
++++ b/playbooks/os/openshift-cluster/vars.yml
+@@ -27,7 +27,7 @@ deployment_vars:
+   enterprise:
+     image:
+       url:
+-      name: rhel-7.1
++      name: rhel-7.1-openshift-2015.05.21
+       sha256:
+     ssh_user: openshift
+     sudo: yes
