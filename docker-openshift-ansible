@@ -1,12 +1,22 @@
 #!/bin/sh
 
 exec docker run --rm -ti \
+                \
+                -e UID=$(id -u) \
+                -e LOGNAME=$LOGNAME \
+                -e HOME=$HOME \
+                -v $HOME/.ssh/id_rsa.pub:$HOME/.ssh/id_rsa.pub:ro \
+                -v $SSH_AUTH_SOCK:/tmp/ssh/agent \
+                -e SSH_AUTH_SOCK=/tmp/ssh/agent \
+                \
                 -e OS_USERNAME=$OS_USERNAME \
                 -e OS_PASSWORD=$OS_PASSWORD \
                 -e OS_TENANT_NAME=$OS_TENANT_NAME \
                 -e OS_AUTH_URL=$OS_AUTH_URL \
-                -e LOGNAME=$LOGNAME \
-                -v $HOME/.ssh/id_rsa.pub:/home/openshift-ansible/.ssh/id_rsa.pub:ro \
-                -v $SSH_AUTH_SOCK:/tmp/ssh/agent \
-                -e SSH_AUTH_SOCK=/tmp/ssh/agent \
+                \
+                -e KVM_GID=$(getent group | awk -F : '$1 == "kvm" {print $3}') \
+                -v /var/run/libvirt/libvirt-sock-ro:/var/run/libvirt/libvirt-sock-ro:ro \
+                -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock \
+                -v $HOME/libvirt-storage-pool-openshift-ansible:$HOME/libvirt-storage-pool-openshift-ansible \
+                \
                 lhuard1a/openshift-ansible "$@"
