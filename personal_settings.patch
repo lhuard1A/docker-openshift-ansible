@@ -12,3 +12,56 @@ index aff7d72..cfe7b38 100755
          if 'use_fluentd' not in facts['common']:
              use_fluentd = True if deployment_type == 'online' else False
              facts['common']['use_fluentd'] = use_fluentd
+diff --git a/roles/openshift_register_nodes/tasks/main.yml b/roles/openshift_register_nodes/tasks/main.yml
+index 7a85f66..5896ca1 100644
+--- a/roles/openshift_register_nodes/tasks/main.yml
++++ b/roles/openshift_register_nodes/tasks/main.yml
+@@ -43,20 +43,20 @@
+     creates: "{{ openshift_generated_configs_dir }}/node-{{ item.openshift.common.hostname }}"
+   with_items: openshift_nodes
+
+-- name: Register unregistered nodes
+-  kubernetes_register_node:
+-    kubectl_cmd: ['osc']
+-    default_client_config: '~/.config/openshift/.config'
+-    name: "{{ item.openshift.common.hostname }}"
+-    api_version: "{{ openshift_kube_api_version }}"
+-    cpu: "{{ item.openshift.node.resources_cpu | default(None) }}"
+-    memory: "{{ item.openshift.node.resources_memory | default(None) }}"
+-    pod_cidr: "{{ item.openshift.node.pod_cidr | default(None) }}"
+-    host_ip: "{{ item.openshift.common.ip }}"
+-    labels: "{{ item.openshift.node.labels | default({}) }}"
+-    annotations: "{{ item.openshift.node.annotations | default({}) }}"
+-    external_id: "{{ item.openshift.node.external_id }}"
+-    # TODO: support customizing other attributes such as: client_config,
+-    # client_cluster, client_context, client_user
+-  with_items: openshift_nodes
+-  register: register_result
++# - name: Register unregistered nodes
++#   kubernetes_register_node:
++#     kubectl_cmd: ['osc']
++#     default_client_config: '~/.config/openshift/.config'
++#     name: "{{ item.openshift.common.hostname }}"
++#     api_version: "{{ openshift_kube_api_version }}"
++#     cpu: "{{ item.openshift.node.resources_cpu | default(None) }}"
++#     memory: "{{ item.openshift.node.resources_memory | default(None) }}"
++#     pod_cidr: "{{ item.openshift.node.pod_cidr | default(None) }}"
++#     host_ip: "{{ item.openshift.common.ip }}"
++#     labels: "{{ item.openshift.node.labels | default({}) }}"
++#     annotations: "{{ item.openshift.node.annotations | default({}) }}"
++#     external_id: "{{ item.openshift.node.external_id }}"
++#     # TODO: support customizing other attributes such as: client_config,
++#     # client_cluster, client_context, client_user
++#   with_items: openshift_nodes
++#   register: register_result
+diff --git a/roles/openshift_sdn_node/tasks/main.yml b/roles/openshift_sdn_node/tasks/main.yml
+index 5918390..5a80caf 100644
+--- a/roles/openshift_sdn_node/tasks/main.yml
++++ b/roles/openshift_sdn_node/tasks/main.yml
+@@ -58,3 +58,6 @@
+     name: openshift-sdn-node
+     enabled: yes
+     state: started
++
++- name: Start and enable openshift-node
++  service: name=openshift-node enabled=yes state=started
