@@ -4,7 +4,7 @@ MAINTAINER Lénaïc Huard <lhuard@amadeus.com>
 
 # Install openshift-ansible dependencies
 
-RUN yum -y install ansible \
+RUN dnf -y install ansible \
                    openssh-clients \
                    \
                    python-novaclient \
@@ -13,7 +13,7 @@ RUN yum -y install ansible \
                    \
                    libvirt-python \
                    genisoimage && \
-    yum clean all
+    dnf clean all
 
 
 # Backport https://github.com/ansible/ansible/pull/10639
@@ -25,11 +25,11 @@ RUN sed -i 's/\t/        /g' /usr/lib/python2.7/site-packages/ansible/module_uti
 
 ADD https://github.com/lhuard1A/openshift-ansible/archive/2015.06.09.tar.gz /openshift-ansible/
 
-RUN yum -y install tar && \
+RUN dnf -y install tar && \
     cd /openshift-ansible && \
     tar -xf 2015.06.09.tar.gz --strip 1 && \
-    yum -y erase tar && \
-    yum clean all
+    dnf -y erase tar && \
+    dnf clean all
 
 RUN ln -s inventory/openstack/hosts/nova.ini /openshift-ansible
 
@@ -38,11 +38,11 @@ RUN ln -s inventory/openstack/hosts/nova.ini /openshift-ansible
 
 ADD personal_settings.patch /openshift-ansible/
 
-RUN yum -y install patch && \
+RUN dnf -y install patch && \
     cd /openshift-ansible && \
     patch -p1 < personal_settings.patch && \
-    yum -y erase patch && \
-    yum clean all
+    dnf -y erase patch && \
+    dnf clean all
 
 
 # Add init.sh
