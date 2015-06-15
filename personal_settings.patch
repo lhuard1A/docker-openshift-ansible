@@ -38,3 +38,23 @@ index cb67a13..924b722 100755
          if 'use_fluentd' not in facts['common']:
              use_fluentd = True if deployment_type == 'online' else False
              facts['common']['use_fluentd'] = use_fluentd
+diff --git a/playbooks/libvirt/openshift-cluster/vars.yml b/playbooks/libvirt/openshift-cluster/vars.yml
+index e27b1a7..8fc7839 100644
+--- a/playbooks/libvirt/openshift-cluster/vars.yml
++++ b/playbooks/libvirt/openshift-cluster/vars.yml
+@@ -24,9 +24,12 @@ deployment_vars:
+     sudo: no
+   enterprise:
+     image:
+-      url:
+-      name:
+-      sha256:
++      url:    "{{ lookup('oo_option',
++              'image_url    default=http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2') }}"
++      name:   "{{ lookup('oo_option',
++              'image_name   default=CentOS-7-x86_64-GenericCloud.qcow2') }}"
++      sha256: "{{ lookup('oo_option',
++              'image_sha256 default=e324e3ab1d24a1bbf035ddb365e7f9058c0b454acf48d7aa15c5519fae5998ab') }}"
+     ssh_user: openshift
+     sudo: yes
+ #  origin:
