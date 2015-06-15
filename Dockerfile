@@ -23,11 +23,11 @@ RUN sed -i 's/\t/        /g' /usr/lib/python2.7/site-packages/ansible/module_uti
 
 # Install openshift-ansible
 
-ADD https://github.com/lhuard1A/openshift-ansible/archive/2015.06.09.tar.gz /openshift-ansible/
+ADD https://github.com/lhuard1A/openshift-ansible/archive/2015.06.15.tar.gz /openshift-ansible/
 
 RUN dnf -y install tar && \
     cd /openshift-ansible && \
-    tar -xf 2015.06.09.tar.gz --strip 1 && \
+    tar -xf 2015.06.15.tar.gz --strip 1 && \
     dnf -y erase tar && \
     dnf clean all
 
