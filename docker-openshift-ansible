@@ -19,4 +19,4 @@ exec docker run --rm -ti \
                 -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock \
                 -v $HOME/libvirt-storage-pool-openshift-ansible:$HOME/libvirt-storage-pool-openshift-ansible \
                 \
-                lhuard1a/openshift-ansible "$@"
+                lhuard1a/openshift-ansible:2015.06.15 "$@"
