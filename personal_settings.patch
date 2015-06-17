@@ -58,3 +58,16 @@ index e27b1a7..8fc7839 100644
      ssh_user: openshift
      sudo: yes
  #  origin:
+diff --git a/roles/openshift_node/tasks/main.yml b/roles/openshift_node/tasks/main.yml
+index 15d18f5..3682370 100644
+--- a/roles/openshift_node/tasks/main.yml
++++ b/roles/openshift_node/tasks/main.yml
+@@ -65,7 +65,7 @@
+   lineinfile:
+     dest: /etc/sysconfig/docker
+     regexp: '^OPTIONS=.*'
+-    line: "OPTIONS='--insecure-registry={{ openshift.node.portal_net }} --selinux-enabled'"
++    line: "OPTIONS='--insecure-registry={{ openshift.node.portal_net }} --insecure-registry=dockerhub.rnd.amadeus.net:5000 --insecure-registry=nceuhasro00.top.nce.amadeus.net:5000 --selinux-enabled'"
+   when: docker_check.stat.isreg
+ 
+ - name: Allow NFS access for VMs
