@@ -1,4 +1,4 @@
-FROM fedora
+FROM fedora:22
 MAINTAINER Lénaïc Huard <lhuard@amadeus.com>
 
 
