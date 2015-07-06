@@ -1,63 +1,3 @@
-diff --git a/playbooks/libvirt/openshift-cluster/launch.yml b/playbooks/libvirt/openshift-cluster/launch.yml
-index a7ddc1e..6badcb3 100644
---- a/playbooks/libvirt/openshift-cluster/launch.yml
-+++ b/playbooks/libvirt/openshift-cluster/launch.yml
-@@ -13,7 +13,7 @@
-     image_name: "{{ deployment_vars[deployment_type].image.name }}"
-   tasks:
-   - fail: msg="Deployment type not supported for libvirt provider yet"
--    when: deployment_type in ['online', 'enterprise']
-+    when: deployment_type == 'online'
- 
-   - include: tasks/configure_libvirt.yml
- 
-diff --git a/playbooks/openstack/openshift-cluster/launch.yml b/playbooks/openstack/openshift-cluster/launch.yml
-index 5c86ade..41439c4 100644
---- a/playbooks/openstack/openshift-cluster/launch.yml
-+++ b/playbooks/openstack/openshift-cluster/launch.yml
-@@ -8,7 +8,7 @@
-   tasks:
-   - fail:
-       msg: "Deployment type not supported for OpenStack provider yet"
--    when: deployment_type in ['online', 'enterprise']
-+    when: deployment_type == 'online'
- 
-   - include: tasks/configure_openstack.yml
- 
-diff --git a/roles/openshift_facts/library/openshift_facts.py b/roles/openshift_facts/library/openshift_facts.py
-index cb67a13..924b722 100755
---- a/roles/openshift_facts/library/openshift_facts.py
-+++ b/roles/openshift_facts/library/openshift_facts.py
-@@ -318,7 +318,8 @@ def set_fluentd_facts_if_unset(facts):
- 
-     """
-     if 'common' in facts:
--        deployment_type = facts['common']['deployment_type']
-+        # deployment_type = facts['common']['deployment_type']
-+        deployment_type = 'enterprise'
-         if 'use_fluentd' not in facts['common']:
-             use_fluentd = True if deployment_type == 'online' else False
-             facts['common']['use_fluentd'] = use_fluentd
-diff --git a/playbooks/libvirt/openshift-cluster/vars.yml b/playbooks/libvirt/openshift-cluster/vars.yml
-index e27b1a7..8fc7839 100644
---- a/playbooks/libvirt/openshift-cluster/vars.yml
-+++ b/playbooks/libvirt/openshift-cluster/vars.yml
-@@ -24,9 +24,12 @@ deployment_vars:
-     sudo: no
-   enterprise:
-     image:
--      url:
--      name:
--      sha256:
-+      url:    "{{ lookup('oo_option',
-+              'image_url    default=http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2') }}"
-+      name:   "{{ lookup('oo_option',
-+              'image_name   default=CentOS-7-x86_64-GenericCloud.qcow2') }}"
-+      sha256: "{{ lookup('oo_option',
-+              'image_sha256 default=e324e3ab1d24a1bbf035ddb365e7f9058c0b454acf48d7aa15c5519fae5998ab') }}"
-     ssh_user: openshift
-     sudo: yes
- #  origin:
 diff --git a/roles/openshift_node/tasks/main.yml b/roles/openshift_node/tasks/main.yml
 index 15d18f5..3682370 100644
 --- a/roles/openshift_node/tasks/main.yml
@@ -67,7 +7,43 @@ index 15d18f5..3682370 100644
      dest: /etc/sysconfig/docker
      regexp: '^OPTIONS=.*'
 -    line: "OPTIONS='--insecure-registry={{ openshift.node.portal_net }} --selinux-enabled'"
-+    line: "OPTIONS='--insecure-registry={{ openshift.node.portal_net }} --insecure-registry=dockerhub.rnd.amadeus.net:5000 --insecure-registry=nceuhasro00.top.nce.amadeus.net:5000 --selinux-enabled'"
++    line: "OPTIONS='--insecure-registry={{ openshift.node.portal_net }} --insecure-registry=dockerhub.rnd.amadeus.net:5000 --insecure-registry=dockerhub.rnd.amadeus.net:5001 --insecure-registry=dockerhub.rnd.amadeus.net:5002 --insecure-registry=nceuhasro00.top.nce.amadeus.net:5000 --selinux-enabled'"
    when: docker_check.stat.isreg
  
  - name: Allow NFS access for VMs
+diff --git a/playbooks/common/openshift-node/config.yml b/playbooks/common/openshift-node/config.yml
+index 0eec1ae..cdb8759 100644
+--- a/playbooks/common/openshift-node/config.yml
++++ b/playbooks/common/openshift-node/config.yml
+@@ -136,17 +136,17 @@
+   - os_env_extras
+   - os_env_extras_node
+ 
+-- name: Set scheduleability
+-  hosts: oo_first_master
+-  vars:
+-    openshift_unscheduleable_nodes: "{{ hostvars
+-                                        | oo_select_keys(groups['oo_nodes_to_config']) 
+-                                        | oo_collect('openshift_hostname', {'openshift_scheduleable': False}) }}"
+-  pre_tasks:
+-  - set_fact:
+-      openshift_scheduleable_nodes: "{{ hostvars
+-                                      | oo_select_keys(groups['oo_nodes_to_config'])
+-                                      | oo_collect('openshift_hostname') 
+-                                      | difference(openshift_unscheduleable_nodes) }}"
+-  roles:
+-  - openshift_manage_node
++# - name: Set scheduleability
++#   hosts: oo_first_master
++#   vars:
++#     openshift_unscheduleable_nodes: "{{ hostvars
++#                                         | oo_select_keys(groups['oo_nodes_to_config']) 
++#                                         | oo_collect('openshift_hostname', {'openshift_scheduleable': False}) }}"
++#   pre_tasks:
++#   - set_fact:
++#       openshift_scheduleable_nodes: "{{ hostvars
++#                                       | oo_select_keys(groups['oo_nodes_to_config'])
++#                                       | oo_collect('openshift_hostname') 
++#                                       | difference(openshift_unscheduleable_nodes) }}"
++#   roles:
++#   - openshift_manage_node
