@@ -5,7 +5,7 @@ The `lhuard1a/openshift-ansible` docker image packages [openshift-ansible](https
 
 In order to work properly, the `lhuard1a/openshift-ansible` docker image has some requirements.
 
-The easiest way to use it is to use the [`docker-openshift-ansible script`](https://github.com/lhuard1A/docker-openshift-ansible-os/blob/master/docker-openshift-ansible) that can be downloaded at the following url: https://raw.githubusercontent.com/lhuard1A/docker-openshift-ansible-os/master/docker-openshift-ansible
+The easiest way to use it is to use the [`docker-openshift-ansible script`](https://github.com/lhuard1A/docker-openshift-ansible-os/blob/2015.07.06/docker-openshift-ansible) that can be downloaded at the following url: https://raw.githubusercontent.com/lhuard1A/docker-openshift-ansible-os/2015.07.06/docker-openshift-ansible
 
 Pre-requisites:
 ---------------
