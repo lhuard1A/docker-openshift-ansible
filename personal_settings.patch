@@ -7,7 +7,7 @@ index 15d18f5..3682370 100644
      dest: /etc/sysconfig/docker
      regexp: '^OPTIONS=.*'
 -    line: "OPTIONS='--insecure-registry={{ openshift.node.portal_net }} --selinux-enabled'"
-+    line: "OPTIONS='--insecure-registry={{ openshift.node.portal_net }} --insecure-registry=dockerhub.rnd.amadeus.net:5000 --insecure-registry=dockerhub.rnd.amadeus.net:5001 --insecure-registry=dockerhub.rnd.amadeus.net:5002 --insecure-registry=nceuhasro00.top.nce.amadeus.net:5000 --selinux-enabled'"
++    line: "OPTIONS='--insecure-registry={{ openshift.node.portal_net }} --selinux-enabled'"
    when: docker_check.stat.isreg
  
  - name: Allow NFS access for VMs
